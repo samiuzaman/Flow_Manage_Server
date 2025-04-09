@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 // Middleware
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://tutor-world.netlify.app"],
+    origin: ["http://localhost:5173"],
     credentials: true,
   })
 );
@@ -49,7 +49,8 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
 
-    
+    const ServicesCollection = client.db("Track_Ease").collection("Services");
+    const ReviewsCollection = client.db("Track_Ease").collection("Reviews");
 
     // Auth Related API
     // app.post("/jwt", async (req, res) => {
@@ -76,7 +77,19 @@ async function run() {
     //     .send({ Logout: true });
     // });
 
-    
+    // Get All Services
+    app.get("/services", async (req, res) => {
+      const cursor = ServicesCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    // Get All Reviews
+    app.get("/reviews", async (req, res) => {
+      const cursor = ReviewsCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
